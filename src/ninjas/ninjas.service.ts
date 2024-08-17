@@ -4,57 +4,56 @@ import { UpdateNinjaDto } from './dto/update-ninja.dto';
 
 @Injectable()
 export class NinjasService {
-    private ninjas = [
-        { id: 0, name: 'ninjaA', weapon: 'stars'},
-        { id: 1, name: 'ninjaB', weapon: 'tank'}
-    ];
+  private ninjas = [
+    { id: 0, name: 'ninjaA', weapon: 'stars' },
+    { id: 1, name: 'ninjaB', weapon: 'tank' },
+  ];
 
-    getNinjas(weapon?: 'stars' | 'tank') {
-        if (weapon) {
-            return this.ninjas.filter((ninja) => ninja.weapon === weapon);
-        }
-
-        return this.ninjas;
+  getNinjas(weapon?: 'stars' | 'tank') {
+    if (weapon) {
+      return this.ninjas.filter((ninja) => ninja.weapon === weapon);
     }
 
-    getNinja(id: number) {
-        const ninja = this.ninjas.find(ninja => ninja.id === id);
+    return this.ninjas;
+  }
 
-        if(!ninja) {
-            throw new NotFoundException('ninja not found')
-        }
+  getNinja(id: number) {
+    const ninja = this.ninjas.find((ninja) => ninja.id === id);
 
-        return ninja;
+    if (!ninja) {
+      throw new Error('ninja not found');
     }
 
-    createNinja(createNinjaDto: CreateNinjaDto) {
-        const newNinja = {
-            ...createNinjaDto,
-            id: Date.now()
-        };
-        this.ninjas.push(newNinja);
+    return ninja;
+  }
 
-        return newNinja;
-    }
+  createNinja(createNinjaDto: CreateNinjaDto) {
+    const newNinja = {
+      ...createNinjaDto,
+      id: Date.now(),
+    };
+    this.ninjas.push(newNinja);
 
-    updateNinja(id: number, updateNinjaDto: UpdateNinjaDto) {
-        this.ninjas = this.ninjas.map((ninja) =>{
-            if (ninja.id === id) {
-                return { ...ninja, ...updateNinjaDto};
-            }
+    return newNinja;
+  }
 
-            return ninja;
-        });
+  updateNinja(id: number, updateNinjaDto: UpdateNinjaDto) {
+    this.ninjas = this.ninjas.map((ninja) => {
+      if (ninja.id === id) {
+        return { ...ninja, ...updateNinjaDto };
+      }
 
-        return this.getNinja(id);
+      return ninja;
+    });
 
-    }
+    return this.getNinja(id);
+  }
 
-    removeNinja(id: number) {
-        const toBeRemoved = this.getNinja(id);
+  removeNinja(id: number) {
+    const toBeRemoved = this.getNinja(id);
 
-        this.ninjas = this.ninjas.filter((ninja) => ninja.id !== id);
+    this.ninjas = this.ninjas.filter((ninja) => ninja.id !== id);
 
-        return toBeRemoved;
-    }
+    return toBeRemoved;
+  }
 }
